@@ -36,7 +36,7 @@ print("read contents of file")
 # replace urls
 replaced = db_contents.replace(args.oldurl.encode(), args.newurl.encode())
 # replace db name
-replaced = replaced.replace(args.olddb.encode(), args.newdb.encode())
+replaced = replaced.replace(b'`' + args.olddb.encode() + b'`', b'`' + args.newdb.encode() + b'`')
 
 print("replaced urls and db names")
 
