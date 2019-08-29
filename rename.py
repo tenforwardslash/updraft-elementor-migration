@@ -33,8 +33,12 @@ with gzip.open(args.filename, 'rb') as f:
 
 print("read contents of file")
 
-# replace urls
+# replace urls, includeing the weird http:\\/\\/localhost:8888 escaped version
 replaced = db_contents.replace(args.oldurl.encode(), args.newurl.encode())
+escaped_old_url = args.oldurl.replace("/", "\\/").encode()
+escaped_new_url = args.newurl.replace("/", "\\/").encode()
+replaced = replaced.replace(escaped_old_url, escaped_new_url)
+
 # replace db name
 replaced = replaced.replace(b'`' + args.olddb.encode() + b'`', b'`' + args.newdb.encode() + b'`')
 
