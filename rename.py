@@ -24,7 +24,10 @@ parser.add_argument('--filename', type=str, help='UpDraft backup file name', req
 parser.add_argument('--backup', help='Save unreplaced to .bak file', action='store_true')
 args = parser.parse_args()
 
-print("Replacing in {0.filename}: \n - URL: {0.oldurl} -> {0.newurl} \n - DB: {0.olddb} -> {0.newdb}".format(args))
+escaped_old_url = args.oldurl.replace("/", "\\\/")
+escaped_new_url = args.newurl.replace("/", "\\\/")
+
+print("Replacing in {0.filename}: \n - URL: {0.oldurl} -> {0.newurl} \n - Escaped URL: {1} -> {2} \n - DB: {0.olddb} -> {0.newdb}".format(args, escaped_old_url, escaped_new_url))
 print("-------------------------------------------------------------------")
 
 
@@ -34,13 +37,11 @@ with gzip.open(args.filename, 'rb') as f:
 print("read contents of file")
 
 # replace urls, includeing the weird http:\\/\\/localhost:8888 escaped version
-replaced = db_contents.replace(args.oldurl.encode(), args.newurl.encode())
-escaped_old_url = args.oldurl.replace("/", "\\/").encode()
-escaped_new_url = args.newurl.replace("/", "\\/").encode()
-replaced = replaced.replace(escaped_old_url, escaped_new_url)
+url_replaced = db_contents.replace(args.oldurl.encode(), args.newurl.encode())
+escaped_replaced = url_replaced.replace(escaped_old_url.encode(), escaped_new_url.encode())
 
 # replace db name
-replaced = replaced.replace(b'`' + args.olddb.encode() + b'`', b'`' + args.newdb.encode() + b'`')
+replaced = escaped_replaced.replace(b'`' + args.olddb.encode() + b'`', b'`' + args.newdb.encode() + b'`')
 
 print("replaced urls and db names")
 
