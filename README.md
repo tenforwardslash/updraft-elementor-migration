@@ -1,5 +1,5 @@
-# updraft-elementor-migration
-Convert urls and database name in updraft to accomodate for elementor being lame in their media attachments.
+# updraft-migrator
+Convert urls and database name in updraft.
 If you have local changes and want them to be reflected in the staging site, run this script on the *database* backup created by Updraft. 
 
 ## Usage: 
